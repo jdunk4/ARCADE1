@@ -25,8 +25,31 @@ wss.on("connection", (ws) => {
   });
 });
 
+// Health check
 app.get("/", (req, res) => {
   res.send("MML Arcade Server is running!");
+});
+
+// Protected ROM endpoint
+app.get("/rom/:filename", (req, res) => {
+  const secret = req.query.token;
+  const expectedSecret = process.env.ROM_SECRET;
+
+  if (!secret || secret !== expectedSecret) {
+    return res.status(403).json({ error: "Access denied" });
+  }
+
+  const filename = decodeURIComponent(req.params.filename);
+  const romPath = path.join(__dirname, "rom", filename);
+
+  if (!fs.existsSync(romPath)) {
+    return res.status(404).json({ error: "ROM not found" });
+  }
+
+  console.log(`Serving ROM: ${filename}`);
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Content-Type", "application/octet-stream");
+  res.sendFile(romPath);
 });
 
 const PORT = process.env.PORT || 8080;
