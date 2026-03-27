@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Arcade Game</title>
+  <title>Kaizo Mario World</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -27,8 +27,24 @@
     EJS_gameUrl = "./rom/Kaizo Mario (English).sfc";
     EJS_pathtodata = "https://cdn.emulatorjs.org/stable/data/";
     EJS_startOnLoaded = true;
-    EJS_gamepadEnabled = true;
     EJS_color = "#e8000d";
+    EJS_gamepadEnabled = true;
+    EJS_defaultControls = {
+      0: {
+        0: { value: "BUTTON_1" },
+        1: { value: "BUTTON_2" },
+        2: { value: "BUTTON_3" },
+        3: { value: "BUTTON_4" },
+        4: { value: "SELECT" },
+        5: { value: "START" },
+        12: { value: "DPAD_UP" },
+        13: { value: "DPAD_DOWN" },
+        14: { value: "DPAD_LEFT" },
+        15: { value: "DPAD_RIGHT" },
+        6: { value: "LEFT_TOP_SHOULDER" },
+        7: { value: "RIGHT_TOP_SHOULDER" }
+      }
+    };
   </script>
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
