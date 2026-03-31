@@ -16,6 +16,9 @@
   <m-sphere radius="0.045" y="1.07" z="0.05" x="0.15" color="#e8000d"></m-sphere>
   <m-sphere radius="0.045" y="1.07" z="0.05" x="0.28" color="#ffcc00"></m-sphere>
 
+  <!-- DEBUG: changes when E is pressed to confirm JS fires -->
+  <m-label id="debug-label" content="IDLE" y="2.8" z="0.5" width="1.0" height="0.15" font-size="14" color="#ffff00" alignment="center"></m-label>
+
   <!-- Game Screen preview (shown when idle) -->
   <m-image
     id="screen-preview"
@@ -26,10 +29,10 @@
     z="0.46">
   </m-image>
 
-  <!-- Game Frame (hidden until E pressed) -->
+  <!-- Game Frame (pre-loaded, hidden until E pressed) -->
   <m-frame
     id="game-frame"
-    src=""
+    src="https://jdunk4.github.io/Gamer/game.html"
     width="0.88"
     height="0.72"
     y="1.75"
@@ -57,7 +60,6 @@
   <script>
     var gameActive = false;
 
-    // In MML, scripts run directly in the networked DOM context — no window.load needed
     var interact = document.getElementById('interact');
     var probe = document.getElementById('probe');
 
@@ -75,6 +77,8 @@
     });
 
     function toggleGame() {
+      // Debug: update label so we can see if this function fires
+      document.getElementById('debug-label').setAttribute('content', 'ACTIVATED ' + Date.now());
       if (gameActive) {
         closeGame();
       } else {
@@ -84,7 +88,6 @@
 
     function launchGame() {
       gameActive = true;
-      document.getElementById('game-frame').setAttribute('src', 'https://jdunk4.github.io/Gamer/game.html');
       document.getElementById('game-frame').setAttribute('visible', 'true');
       document.getElementById('screen-preview').setAttribute('visible', 'false');
     }
@@ -92,7 +95,6 @@
     function closeGame() {
       if (!gameActive) return;
       gameActive = false;
-      document.getElementById('game-frame').setAttribute('src', '');
       document.getElementById('game-frame').setAttribute('visible', 'false');
       document.getElementById('screen-preview').setAttribute('visible', 'true');
     }
