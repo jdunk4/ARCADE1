@@ -16,7 +16,7 @@
   <m-sphere radius="0.045" y="1.07" z="0.05" x="0.15" color="#e8000d"></m-sphere>
   <m-sphere radius="0.045" y="1.07" z="0.05" x="0.28" color="#ffcc00"></m-sphere>
 
-  <!-- DEBUG: changes when E is pressed to confirm JS fires -->
+  <!-- DEBUG label — remove once confirmed working -->
   <m-label id="debug-label" content="IDLE" y="2.8" z="0.5" width="1.0" height="0.15" font-size="14" color="#ffff00" alignment="center"></m-label>
 
   <!-- Game Screen preview (shown when idle) -->
@@ -54,7 +54,7 @@
   <!-- Proximity probe -->
   <m-position-probe id="probe" range="3.0"></m-position-probe>
 
-  <!-- Interaction trigger -->
+  <!-- Interaction trigger — "interact" is the correct MML event name -->
   <m-interaction id="interact" prompt="Press E to Play" range="2.5"></m-interaction>
 
   <script>
@@ -63,7 +63,9 @@
     var interact = document.getElementById('interact');
     var probe = document.getElementById('probe');
 
-    interact.addEventListener('activate', function() {
+    // CORRECT event name for MML m-interaction is "interact" not "activate"
+    interact.addEventListener('interact', function() {
+      document.getElementById('debug-label').setAttribute('content', 'FIRED ' + Date.now());
       toggleGame();
     });
 
@@ -77,8 +79,6 @@
     });
 
     function toggleGame() {
-      // Debug: update label so we can see if this function fires
-      document.getElementById('debug-label').setAttribute('content', 'ACTIVATED ' + Date.now());
       if (gameActive) {
         closeGame();
       } else {
