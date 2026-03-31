@@ -1,19 +1,18 @@
 {
-"name": "mml-snes-streaming-server",
-"version": "1.0.0",
-"description": "Server-side SNES emulator streaming frames via WebSocket — Path B fallback",
-"main": "snes-server.js",
-"scripts": {
-"start": "node snes-server.js"
-},
-"dependencies": {
-"canvas": "^2.11.2",
-"express": "latest",
-"node-fetch": "^3.3.2",
-"snes9x-wasm": "latest",
-"ws": "latest"
-},
-"engines": {
-"node": ">=18.0.0"
-}
+  "name": "mml-nes-streaming-server",
+  "version": "1.0.0",
+  "description": "Server-side NES emulator streaming frames via WebSocket — Path B",
+  "main": "server-b.js",
+  "scripts": {
+    "start": "node server-b.js"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "express": "latest",
+    "jsnes": "latest",
+    "ws": "latest"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
