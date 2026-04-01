@@ -16,11 +16,7 @@ const ctx = c.getContext('2d');
 const W = 512, H = 448;
 
 let frame = 0;
-let stars = [];
-for(let i=0;i<60;i++) stars.push({x:Math.random()*W,y:Math.random()*H,b:Math.random(),s:Math.random()*0.8+0.2});
 
-// Pixel Mario sprite data (16x16 blocks scaled up)
-// Each row is an array of color indices: 0=transparent,1=red,2=skin,3=brown,4=blue,5=black
 const MARIO = [
   [0,0,0,1,1,1,1,1,0,0,0,0],
   [0,0,1,1,1,1,1,1,1,1,1,0],
@@ -73,19 +69,15 @@ function drawCoin(x, y, t) {
 
 function drawMushroom(x, y, t) {
   const bob = Math.sin(t * 0.08 + x) * 3;
-  // Cap
   ctx.fillStyle = '#e8000d';
   ctx.fillRect(x-10, y+bob-10, 20, 12);
   ctx.fillRect(x-14, y+bob-6, 28, 8);
-  // Spots
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(x-8, y+bob-9, 5, 5);
   ctx.fillRect(x+4, y+bob-9, 5, 5);
   ctx.fillRect(x-2, y+bob-12, 5, 4);
-  // Stem
   ctx.fillStyle = '#ffddaa';
   ctx.fillRect(x-8, y+bob+2, 16, 10);
-  // Eyes
   ctx.fillStyle = '#000';
   ctx.fillRect(x-5, y+bob+4, 3, 3);
   ctx.fillRect(x+2, y+bob+4, 3, 3);
@@ -128,7 +120,6 @@ function drawGround(scrollX) {
     ctx.fillStyle = '#3a7a00';
     ctx.fillRect(x-32, H-48, 32, 6);
   }
-  // Ground tiles
   for(let x=(scrollX%32); x<W+32; x+=32) {
     ctx.strokeStyle = '#7a5020';
     ctx.lineWidth = 1;
@@ -143,7 +134,6 @@ function drawPipe(x) {
   ctx.fillRect(x+4, H-40-80, 32, 80);
   ctx.fillStyle = '#008800';
   ctx.fillRect(x+28, H-40-80, 12, 80);
-  // Pipe top
   ctx.fillStyle = '#00aa00';
   ctx.fillRect(x-6, H-40-80, 52, 16);
   ctx.fillStyle = '#00cc00';
@@ -160,12 +150,10 @@ function drawCloud(x, y) {
 
 function drawProgressBar(pct) {
   const bx = 40, by = H-72, bw = W-80, bh = 18;
-  // Outer border
   ctx.fillStyle = '#ffcc00';
   ctx.fillRect(bx-3, by-3, bw+6, bh+6);
   ctx.fillStyle = '#000011';
   ctx.fillRect(bx, by, bw, bh);
-  // Colored fill
   const fillW = (bw * pct)|0;
   const grad = ['#e8000d','#ff6600','#ffcc00','#00cc44'];
   const seg = fillW / grad.length;
@@ -175,17 +163,11 @@ function drawProgressBar(pct) {
     if(sw > 0) ctx.fillRect(sx|0, by, sw|0, bh);
     ctx.fillStyle = grad[i];
   }
-  // Shine
   for(let i=0; i<Math.floor(fillW/8); i++) {
     if(i%2===0) {
       ctx.fillStyle = 'rgba(255,255,255,0.12)';
       ctx.fillRect(bx + i*8, by, 8, 6);
     }
-  }
-  // Coin icons on bar ends
-  if(pct > 0.05) {
-    ctx.fillStyle = '#ffcc00';
-    ctx.fillRect(bx+fillW-6, by+2, 6, 14);
   }
 }
 
@@ -197,49 +179,37 @@ function draw() {
   frame++;
   const t = frame;
 
-  // Sky
   ctx.fillStyle = '#5c94fc';
   ctx.fillRect(0, 0, W, H);
 
-  // Clouds (scrolling slowly)
   const cx = scrollX * 0.3;
   drawCloud(((120 - cx) % (W+80) + W+80) % (W+80) - 80, 40);
   drawCloud(((300 - cx) % (W+80) + W+80) % (W+80) - 80, 20);
   drawCloud(((500 - cx) % (W+80) + W+80) % (W+80) - 80, 55);
 
-  // Blocks
   const blockX = ((200 - scrollX) % (W+100) + W+100) % (W+100) - 100;
   drawBlock(blockX, H-40-80);
   drawBlock(blockX+36, H-40-80);
   drawBlock(blockX+72, H-40-80);
   drawBlock(((380-scrollX) % (W+100) + W+100) % (W+100) - 100, H-40-140);
 
-  // Pipe
   drawPipe(((420 - scrollX) % (W+80) + W+80) % (W+80) - 80);
-
-  // Ground
   drawGround(scrollX);
 
-  // Scroll
   scrollX += 2;
-
-  // Mario runs across
   marioX += 2;
   if(marioX > W + 50) marioX = -50;
   drawMario(marioX, H-40-112, 4, t);
 
-  // Floating items
   drawCoin(130, H-40-110, t);
   drawCoin(340, H-40-110, t+20);
   drawCoin(490, H-40-110, t+40);
   drawMushroom(220, H-40-120, t);
   drawStar(420, H-40-130, t);
 
-  // Dark overlay for text area
   ctx.fillStyle = 'rgba(0,0,17,0.75)';
   ctx.fillRect(0, 0, W, 120);
 
-  // NOW LOADING text with pixel shadow
   ctx.font = 'bold 28px monospace';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -248,41 +218,37 @@ function draw() {
   ctx.fillStyle = '#e8000d';
   ctx.fillText('NOW LOADING', W/2, 40);
 
-  // Animated dots
-  const dots = ['   ', '.  ', '.. ', '...'][(Math.floor(t/15)) % 4];
+  const dots = ['   ','.  ','.. ','...'][(Math.floor(t/15)) % 4];
   ctx.font = 'bold 22px monospace';
   ctx.fillStyle = '#ffcc00';
   ctx.fillText(dots, W/2+60, 40);
 
-  // Subtitle
   ctx.font = '14px monospace';
   ctx.fillStyle = '#aaccff';
   ctx.fillText('PLEASE WAIT WHILE YOUR GAME BOOTS UP', W/2, 70);
 
-  // Blinking insert coin
   if(Math.floor(t/25) % 2 === 0) {
     ctx.font = 'bold 13px monospace';
     ctx.fillStyle = '#00ff44';
     ctx.fillText('— INSERT COIN —', W/2, 95);
   }
 
-  // Progress bar
-  barPct = Math.min(0.95, barPct + 0.0008);
+  // Bar slowly fills over ~30 seconds (600 frames at 20fps)
+  barPct = Math.min(0.95, barPct + 0.0016);
   drawProgressBar(barPct);
 
-  // Percent
   ctx.font = 'bold 13px monospace';
   ctx.textAlign = 'center';
   ctx.fillStyle = '#ffffff';
   ctx.fillText(Math.floor(barPct * 100) + '%', W/2, H-46);
 
-  // Scanlines
   ctx.fillStyle = 'rgba(0,0,0,0.07)';
   for(let y=0;y<H;y+=3) ctx.fillRect(0,y,W,1);
-
-  requestAnimationFrame(draw);
 }
-draw();
+
+// ── KEY FIX: use setInterval instead of requestAnimationFrame ──
+// requestAnimationFrame pauses in background tabs — setInterval does not
+setInterval(draw, 50); // 20fps
 </script>
 </body>
 </html>
